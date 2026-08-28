@@ -179,16 +179,19 @@ cp /usr/riscv64-linux-gnu/lib/libstdc++.so.6 riscv-env/lib/
 
 ## 七、运行 rfsim（gNB + UE 端到端）
 
-### 一键运行
+### 方式 A：QEMU 模拟（x86 主机上，不需要真实 RISC-V 硬件）
 
+这种方式在 x86 主机上用 QEMU 模拟 RISC-V，适合没有 RISC-V 硬件的情况。
+
+**一键运行**
 ```bash
 cd /home/<USER>/oai-riscv
 sudo ./run_rfsim.sh full
 ```
 
-### 手动运行
+**手动运行**
 
-**终端 1：启动 gNB（基站）**
+终端 1：启动 gNB（基站）
 ```bash
 cd /home/<USER>/oai-riscv
 export LD_LIBRARY_PATH=/home/<USER>/oai-riscv/riscv-env/lib
@@ -198,7 +201,7 @@ sudo qemu-riscv64 -L /usr/riscv64-linux-gnu \
   --rfsim --sa --noS1
 ```
 
-**终端 2：启动 UE（终端）**
+终端 2：启动 UE（终端）
 ```bash
 cd /home/<USER>/oai-riscv
 export LD_LIBRARY_PATH=/home/<USER>/oai-riscv/riscv-env/lib
@@ -208,13 +211,81 @@ sudo qemu-riscv64 -L /usr/riscv64-linux-gnu \
   --rfsim --noS1 --sa -C 3319680000
 ```
 
-### 停止
+> **注意**：QEMU 用户态对 SCTP 支持不完整，因此**连核心网（去掉 `--noS1`）在 QEMU 方式下会失败**。noS1 模式（rfsim 端到端）不受影响。
 
+**停止**
 ```bash
 sudo ./run_rfsim.sh stop
 # 或
 sudo pkill -f "qemu.*nr-softmodem"
 sudo pkill -f "qemu.*nr-uesoftmodem"
+sudo ip link delete oaitun_enb1 2>/dev/null
+sudo ip link delete oaitun_ue1 2>/dev/null
+```
+
+### 方式 B：真实 RISC-V 板子（如进迭时空 SpacemiT K1/K3，不需要 QEMU）
+
+如果你用的是**真实的 RISC-V 硬件**（如进迭时空 SpacemiT K1/K3），CPU 本身就是 RISC-V，**不需要 QEMU**，直接在板子上原生运行。
+
+#### B.1 把文件部署到板子
+
+把编译好的 RISC-V 可执行文件、配置、运行库复制到板子上：
+
+```bash
+# 在 x86 主机上，把整个工程同步到板子（板子通过 ssh 连接）
+scp -r build-riscv/nr-softmodem build-riscv/nr-uesoftmodem \
+  build-riscv/librfsimulator.so \
+  ci-scripts/conf_files \
+  riscv-env/lib \
+  user@<板子IP>:/opt/oai-riscv/
+```
+
+> **注意**：板子上的架构必须是 **riscv64**，且 ABI 为 **lp64d**（与编译时的 `-mabi=lp64d` 匹配）。
+
+#### B.2 在板子上设置库路径
+
+```bash
+# 登录到板子
+ssh user@<板子IP>
+export LD_LIBRARY_PATH=/opt/oai-riscv/lib
+```
+
+#### B.3 启动 gNB（基站）
+
+```bash
+cd /opt/oai-riscv
+sudo ./nr-softmodem \
+  -O ci-scripts/conf_files/gnb.sa.band78.106prb.rfsim.conf \
+  --rfsim --sa --noS1
+```
+
+#### B.4 启动 UE（终端）
+
+```bash
+cd /opt/oai-riscv
+sudo ./nr-uesoftmodem \
+  -O ci-scripts/conf_files/nrue.band78.106prb.rfsim.conf \
+  --rfsim --noS1 --sa -C 3319680000
+```
+
+#### B.5 真实板子的优势
+
+| 优势 | 说明 |
+|---|---|
+| **无 QEMU SCTP 限制** | 板子跑完整 Linux 内核，SCTP 完整，**可连真实 5G 核心网**（去掉 `--noS1`）|
+| **性能好** | 原生 RISC-V 执行 + RVV 向量指令，远快于 QEMU 模拟 |
+| **接入快** | 无需 simde 在 QEMU 上的性能损耗 |
+
+> **进迭时空 K1/K3 注意**：
+> - 板子内核需启用 SCTP 和 TUN 模块（一般官方镜像默认启用）
+> - 如遇 `Protocol not available`（SCTP），需在板子内核开启 `CONFIG_SCTP`
+> - 载波频率 `-C 3319680000` 按需调整
+
+#### B.6 停止
+
+```bash
+sudo pkill -f "nr-softmodem"
+sudo pkill -f "nr-uesoftmodem"
 sudo ip link delete oaitun_enb1 2>/dev/null
 sudo ip link delete oaitun_ue1 2>/dev/null
 ```
