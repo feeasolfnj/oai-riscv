@@ -1,6 +1,6 @@
 #!/bin/bash
-# OAI 5G RISC-V ÒÆÖ²°æ - rfsim Ò»¼üÔËĞĞ½Å±¾
-# ÓÃ·¨: sudo ./run_rfsim.sh [gnb_only|ue_only|full|ping|stop]
+# OAI 5G RISC-V ç§»æ¤ç‰ˆ - rfsim ä¸€é”®è¿è¡Œè„šæœ¬
+# ç”¨æ³•: sudo ./run_rfsim.sh [gnb_only|ue_only|full|ping|stop]
 set -e
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -9,15 +9,15 @@ RISCV_ENV="$REPO_DIR/riscv-env"
 GNB_LOG="/tmp/gnb_rfsim.log"
 UE_LOG="/tmp/ue_rfsim.log"
 
-# ¼ì²éÊÇ·ñ root
+# æ£€æŸ¥æ˜¯å¦ root
 if [ "$EUID" -ne 0 ]; then
-    echo "ÇëÓÃ sudo ÔËĞĞ: sudo $0 $@"
+    echo "è¯·ç”¨ sudo è¿è¡Œ: sudo $0 $@"
     exit 1
 fi
 
-# ¼ì²é¶ş½øÖÆ
+# æ£€æŸ¥äºŒè¿›åˆ¶
 if [ ! -f "$BUILD_DIR/nr-softmodem" ] || [ ! -f "$BUILD_DIR/nr-uesoftmodem" ]; then
-    echo "´íÎó£º¶ş½øÖÆ²»´æÔÚ£¬ÇëÏÈÔËĞĞ ./setup.sh"
+    echo "é”™è¯¯ï¼šäºŒè¿›åˆ¶ä¸å­˜åœ¨ï¼Œè¯·å…ˆè¿è¡Œ ./setup.sh"
     exit 1
 fi
 
@@ -26,48 +26,48 @@ QEMU_CMD="qemu-riscv64 -L /usr/riscv64-linux-gnu"
 
 case "${1:-full}" in
     stop)
-        echo "Í£Ö¹ËùÓĞ½ø³Ì..."
+        echo "åœæ­¢æ‰€æœ‰è¿›ç¨‹..."
         pkill -f nr-uesoftmodem 2>/dev/null || true
         pkill -f "qemu.*nr-softmodem" 2>/dev/null || true
         pkill -f "qemu.*nr-uesoftmodem" 2>/dev/null || true
         sleep 2
         ip link delete oaitun_enb1 2>/dev/null || true
         ip link delete oaitun_ue1 2>/dev/null || true
-        echo "ÒÑÍ£Ö¹²¢ÇåÀí"
+        echo "å·²åœæ­¢å¹¶æ¸…ç†"
         ;;
 
     gnb_only)
-        echo "Æô¶¯ gNB£¨»ùÕ¾£©..."
+        echo "å¯åŠ¨ gNB..."
         pkill -f "qemu.*nr-softmodem" 2>/dev/null || true
         sleep 1
         cd "$BUILD_DIR"
         $QEMU_CMD ./nr-softmodem \
             -O ../ci-scripts/conf_files/gnb.sa.band78.106prb.rfsim.conf \
             --rfsim --sa --noS1 > "$GNB_LOG" 2>&1 &
-        echo "gNB ÒÑÆô¶¯ (PID: $!), ÈÕÖ¾: $GNB_LOG"
-        echo "µÈ´ı¶Ë¿Ú 4043 ¼àÌı..."
+        echo "gNB å·²å¯åŠ¨ (PID: $!), æ—¥å¿—: $GNB_LOG"
+        echo "ç­‰å¾…ç«¯å£ 4043 ç›‘å¬..."
         sleep 10
         grep -i "waiting\|rfsim\|active_clients" "$GNB_LOG" | tail -3
         ;;
 
     ue_only)
-        echo "Æô¶¯ UE£¨ÊÖ»ú£©..."
+        echo "å¯åŠ¨ UE..."
         pkill -f "qemu.*nr-uesoftmodem" 2>/dev/null || true
         sleep 1
         cd "$BUILD_DIR"
         $QEMU_CMD ./nr-uesoftmodem \
             -O ../ci-scripts/conf_files/nrue.band78.106prb.rfsim.conf \
             --rfsim --noS1 --sa -C 3319680000 > "$UE_LOG" 2>&1 &
-        echo "UE ÒÑÆô¶¯ (PID: $!), ÈÕÖ¾: $UE_LOG"
+        echo "UE å·²å¯åŠ¨ (PID: $!), æ—¥å¿—: $UE_LOG"
         ;;
 
     full)
         echo "============================================"
-        echo "  OAI 5G RISC-V rfsim ÍêÕûÔËĞĞ"
+        echo "  OAI 5G RISC-V rfsim å®Œæ•´è¿è¡Œ"
         echo "============================================"
         
-        # ÇåÀí
-        echo "[1/5] ÇåÀí²ĞÁô..."
+        # æ¸…ç†
+        echo "[1/5] æ¸…ç†æ®‹ç•™..."
         pkill -f nr-uesoftmodem 2>/dev/null || true
         pkill -f "qemu.*nr-softmodem" 2>/dev/null || true
         pkill -f "qemu.*nr-uesoftmodem" 2>/dev/null || true
@@ -76,50 +76,50 @@ case "${1:-full}" in
         ip link delete oaitun_ue1 2>/dev/null || true
         rm -f "$GNB_LOG" "$UE_LOG"
         
-        # Æô¶¯ gNB
-        echo "[2/5] Æô¶¯ gNB£¨»ùÕ¾£©..."
+        # å¯åŠ¨ gNB
+        echo "[2/5] å¯åŠ¨ gNB..."
         cd "$BUILD_DIR"
         $QEMU_CMD ./nr-softmodem \
             -O ../ci-scripts/conf_files/gnb.sa.band78.106prb.rfsim.conf \
             --rfsim --sa --noS1 > "$GNB_LOG" 2>&1 &
         GNB_PID=$!
         echo "  gNB PID: $GNB_PID"
-        echo "  µÈ´ı gNB Æô¶¯ (15Ãë)..."
+        echo "  ç­‰å¾… gNB å¯åŠ¨ (15ç§’)..."
         sleep 15
         if ! grep -q "rfsim" "$GNB_LOG"; then
-            echo "  ? gNB Æô¶¯Ê§°Ü£¬²é¿´ÈÕÖ¾: $GNB_LOG"
+            echo "  [âœ“] gNB å¯åŠ¨å¤±è´¥ï¼ŒæŸ¥çœ‹æ—¥å¿—: $GNB_LOG"
             exit 1
         fi
-        echo "  ? gNB ÒÑÆô¶¯£¬¼àÌı¶Ë¿Ú 4043"
+        echo "  [âœ“] gNB å·²å¯åŠ¨ï¼Œç›‘å¬ç«¯å£ 4043"
         
-        # Æô¶¯ UE
-        echo "[3/5] Æô¶¯ UE£¨ÊÖ»ú£©..."
+        # å¯åŠ¨ UE
+        echo "[3/5] å¯åŠ¨ UE..."
         $QEMU_CMD ./nr-uesoftmodem \
             -O ../ci-scripts/conf_files/nrue.band78.106prb.rfsim.conf \
             --rfsim --noS1 --sa -C 3319680000 > "$UE_LOG" 2>&1 &
         UE_PID=$!
         echo "  UE PID: $UE_PID"
         
-        # µÈ´ı½ÓÈë
-        echo "[4/5] µÈ´ı UE ½ÓÈë (60Ãë)..."
+        # ç­‰å¾…æ¥å…¥
+        echo "[4/5] ç­‰å¾… UE æ¥å…¥ (60ç§’)..."
         for i in $(seq 1 60); do
             if grep -q "NR_RRC_CONNECTED" "$UE_LOG" 2>/dev/null; then
-                echo "  ? UE ÒÑ½øÈë RRC CONNECTED ×´Ì¬ (${i}Ãë)"
+                echo "  [âœ“] UE å·²è¿›å…¥ RRC CONNECTED çŠ¶æ€ (${i}ç§’)"
                 break
             fi
             sleep 1
         done
         
-        # ¼ì²é DRB
+        # æ£€æŸ¥ DRB
         if grep -q "noS1.*created default DRB" "$GNB_LOG" 2>/dev/null; then
-            echo "  ? DRB ÒÑ½¨Á¢"
+            echo "  [âœ“] DRB å·²å»ºç«‹"
         else
-            echo "  ? DRB ÉĞÎ´½¨Á¢£¬µÈ´ı¸ü¶àÊ±¼ä..."
+            echo "  [âœ“] DRB å°šæœªå»ºç«‹ï¼Œç­‰å¾…æ›´å¤šæ—¶é—´..."
             sleep 20
         fi
         
-        # ÉèÖÃÂ·ÓÉ
-        echo "[5/5] ÉèÖÃÂ·ÓÉ..."
+        # è®¾ç½®è·¯ç”±
+        echo "[5/5] è®¾ç½®è·¯ç”±..."
         ip addr show oaitun_enb1 2>/dev/null | grep inet | head -1
         ip addr show oaitun_ue1 2>/dev/null | grep inet | head -1
         ip route add 10.0.1.2 dev oaitun_enb1 table 10000 2>/dev/null || true
@@ -128,54 +128,54 @@ case "${1:-full}" in
         ip rule add to 10.0.1.1 lookup 10000 2>/dev/null || true
         ip rule add from 10.0.1.2 lookup 10000 2>/dev/null || true
         ip rule add from 10.0.1.1 lookup 10000 2>/dev/null || true
-        echo "  ? Â·ÓÉÉèÖÃÍê³É"
+        echo "  [âœ“] è·¯ç”±è®¾ç½®å®Œæˆ"
         
         echo ""
         echo "============================================"
-        echo "  rfsim ÒÑ¾ÍĞ÷£¡"
+        echo "  rfsim å·²å°±ç»ªï¼"
         echo "============================================"
         echo ""
-        echo "gNB ÈÕÖ¾: $GNB_LOG"
-        echo "UE  ÈÕÖ¾: $UE_LOG"
+        echo "gNB æ—¥å¿—: $GNB_LOG"
+        echo "UE  æ—¥å¿—: $UE_LOG"
         echo ""
-        echo "Ping ²âÊÔ:"
+        echo "Ping æµ‹è¯•:"
         echo "  ping -I 10.0.1.1 -c 3 10.0.1.2"
         echo ""
-        echo "Í£Ö¹: sudo $0 stop"
+        echo "åœæ­¢: sudo $0 stop"
         ;;
 
     ping)
-        echo "Ping ²âÊÔ (gNB 10.0.1.1 -> UE 10.0.1.2)..."
+        echo "Ping æµ‹è¯• (gNB 10.0.1.1 -> UE 10.0.1.2)..."
         ping -I 10.0.1.1 -c 3 10.0.1.2
         echo ""
-        echo "=== Êı¾İ×ß 5G Õ»ÑéÖ¤ ==="
-        echo "--- ÏÂĞĞ (gNB¡úUE) ---"
+        echo "=== æ•°æ®èµ° 5G æ ˆéªŒè¯ ==="
+        echo "--- ä¸‹è¡Œ (gNBâ†’UE) ---"
         grep -E "enb_tun_read: has_ue=1|sdap_data_req returned 1|UE TUN write" "$GNB_LOG" "$UE_LOG" 2>/dev/null | tail -5
         echo ""
-        echo "--- ÉÏĞĞ (UE¡úgNB) ---"
+        echo "--- ä¸Šè¡Œ (UEâ†’gNB) ---"
         grep -E "gNB TUN write|deliver_sdu_drb.*IP packet" "$GNB_LOG" "$UE_LOG" 2>/dev/null | tail -5
         ;;
 
     status)
-        echo "=== gNB ×´Ì¬ ==="
+        echo "=== gNB çŠ¶æ€ ==="
         grep -iE "active_clients|noS1.*DRB|SecurityMode|ReconfigurationComplete" "$GNB_LOG" 2>/dev/null | tail -5
         echo ""
-        echo "=== UE ×´Ì¬ ==="
+        echo "=== UE çŠ¶æ€ ==="
         grep -iE "pbch decoded|NR_RRC_CONNECTED|ReconfigurationComplete|SecurityMode" "$UE_LOG" 2>/dev/null | tail -5
         echo ""
-        echo "=== TUN ½Ó¿Ú ==="
+        echo "=== TUN æ¥å£ ==="
         ip addr show oaitun_enb1 2>/dev/null | grep inet | head -1
         ip addr show oaitun_ue1 2>/dev/null | grep inet | head -1
         ;;
 
     *)
-        echo "ÓÃ·¨: sudo $0 [full|gnb_only|ue_only|ping|status|stop]"
+        echo "ç”¨æ³•: sudo $0 [full|gnb_only|ue_only|ping|status|stop]"
         echo ""
-        echo "  full      - ÍêÕûÔËĞĞ£¨ÇåÀí+gNB+UE+Â·ÓÉ£©"
-        echo "  gnb_only  - Ö»Æô¶¯ gNB"
-        echo "  ue_only   - Ö»Æô¶¯ UE"
-        echo "  ping      - Ping ²âÊÔ + 5G Õ»ÑéÖ¤"
-        echo "  status    - ²é¿´ÔËĞĞ×´Ì¬"
-        echo "  stop      - Í£Ö¹ËùÓĞ½ø³Ì²¢ÇåÀí"
+        echo "  full      - å®Œæ•´è¿è¡Œï¼ˆæ¸…ç†+gNB+UE+è·¯ç”±ï¼‰"
+        echo "  gnb_only  - åªå¯åŠ¨ gNB"
+        echo "  ue_only   - åªå¯åŠ¨ UE"
+        echo "  ping      - Ping æµ‹è¯• + 5G æ ˆéªŒè¯"
+        echo "  status    - æŸ¥çœ‹è¿è¡ŒçŠ¶æ€"
+        echo "  stop      - åœæ­¢æ‰€æœ‰è¿›ç¨‹å¹¶æ¸…ç†"
         ;;
 esac
