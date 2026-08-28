@@ -47,23 +47,36 @@ sudo apt install -y gcc g++ make cmake git python3 \
   libconfig-dev libsctp-dev libz-dev libopenblas-dev libgfortran5
 ```
 
-### 第 2 步：安装 asn1c（v0.9.29）
+### 第 2 步：安装 asn1c（必须用 mouse07410 分支，支持 OAI 的 -gen-APER/-gen-UPER）
+
+> **⚠️ 重要**：OAI 的 CMake 使用 `-gen-APER` / `-no-gen-UPER` / `-no-gen-JER` 等新版 flags。
+> **`vlm/asn1c`（官方标准版）的 `v0.9.29` 标签不支持这些 flags**，会导致编译在 ASN.1 阶段直接失败：
+> ```
+> -gen-APER: Invalid argument
+> make[3]: *** [.../ANY_aper.c] 错误 64
+> ```
+> **必须使用 `mouse07410/asn1c` 仓库的 `844f9ca` commit**（该版本支持上述 flags）。
 
 ```bash
 cd /tmp
-git clone https://github.com/vlm/asn1c.git
+git clone https://github.com/mouse07410/asn1c.git
 cd asn1c
-git checkout v0.9.29
+git checkout 844f9ca        # 关键：支持 -gen-APER / -gen-UPER 的 commit
 autoreconf -fi
 ./configure
 make -j$(nproc)
 sudo make install
 ```
 
-验证：
+验证（**必须确认支持 -gen-APER，不能只看版本号**）：
 ```bash
-asn1c -v   # 应显示 v0.9.29
+asn1c -v                              # 应显示 v0.9.29 或更新
+asn1c -h | grep -E "no-gen-UPER|no-gen-APER"   # 有输出 = 支持 OAI flags（关键！）
+asn1c -gen-APER >/dev/null 2>&1; echo $?       # 退出码=1 正常；=64 说明不支持（装错了）
 ```
+
+> **排查**：如果 `asn1c -gen-APER` 退出码是 `64`（报 `Invalid argument`），说明 asn1c 版本不对。
+> 请卸载后重新按上面步骤安装，并确认 `git checkout` 成功（HEAD 在 `844f9ca`）。
 
 ### 第 3 步：克隆本仓库
 
@@ -214,6 +227,10 @@ sudo ./build-riscv/nr-softmodem \
 ---
 
 ## 八、常见问题
+
+### Q0: 编译报 `-gen-APER: Invalid argument` / `ANY_aper.c] 错误 64`
+**asn1c 版本不对**。OAI 的 CMake 需要 `-gen-APER`/`-no-gen-UPER` 等新版 flags，但 `vlm/asn1c` 标准版 `v0.9.29` 不支持。
+**解决**：按"第三节第 2 步"安装 `mouse07410/asn1c` 的 `844f9ca` commit（不要用 `v0.9.29` 标签）。装完用 `asn1c -gen-APER` 验证（退出码应为 1，不是 64）。
 
 ### Q1: 编译报 `relocation truncated to fit: R_RISCV_JAL`
 大文件 JAL 跳转超范围。用 `-Os -fno-unroll-loops` 编译该文件。
