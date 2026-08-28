@@ -101,8 +101,8 @@ case "${1:-full}" in
         echo "  UE PID: $UE_PID"
         
         # 等待接入
-        echo "[4/5] 等待 UE 接入 (60秒)..."
-        for i in $(seq 1 60); do
+        echo "[4/5] 等待 UE 接入 (180秒)..."
+        for i in $(seq 1 180); do
             if grep -q "NR_RRC_CONNECTED" "$UE_LOG" 2>/dev/null; then
                 echo "  [✓] UE 已进入 RRC CONNECTED 状态 (${i}秒)"
                 break
