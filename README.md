@@ -166,6 +166,8 @@ sed 's/-O2/-Os -fno-unroll-loops/' cmd.sh | bash
 
 ## 六、准备 RISC-V 运行库
 
+### 情况 A：QEMU 模拟（x86 主机上）
+
 OAI 在 QEMU 上运行需要 RISC-V 版的动态库。把这些库放到 `riscv-env/lib/`：
 
 ```bash
@@ -174,6 +176,26 @@ cp /usr/riscv64-linux-gnu/lib/libc.so.6 riscv-env/lib/
 cp /usr/riscv64-linux-gnu/lib/libstdc++.so.6 riscv-env/lib/
 # 编译/获取 libz、libsctp、libconfig、libopenblas 的 RISC-V 版放入 riscv-env/lib/
 ```
+
+### 情况 B：真实 RISC-V 板子（如进迭时空 SpacemiT K3）—— **不需要这一步**
+
+板子本身运行的就是**原生 RISC-V Linux**，系统里**已经有 RISC-V 版的 libc、libstdc++ 等标准库**，只需要保证板子上安装了：
+- `libz`、`libsctp`、`libconfig`（一般 apt-get 可装）
+- `libgfortran`、`libopenblas`（OpenBLAS 通过 apt 装）
+
+```bash
+# 在进迭时空 K3 板子上（Debian/Ubuntu 系）
+sudo apt update
+sudo apt install -y libconfig-dev libsctp-dev libz-dev libopenblas-dev libgfortran5
+```
+
+**不需要 `riscv-env/lib/` 目录**，运行时库路径直接用系统的：
+
+```bash
+export LD_LIBRARY_PATH=/usr/lib:/usr/lib/riscv64-linux-gnu
+```
+
+> **注意**：因为不需要 `riscv-env/lib/`，QEMU 章节里"复制库到 riscv-env/lib/" 这一步在 K3 板子上**完全跳过**。
 
 ---
 
@@ -229,14 +251,13 @@ sudo ip link delete oaitun_ue1 2>/dev/null
 
 #### B.1 把文件部署到板子
 
-把编译好的 RISC-V 可执行文件、配置、运行库复制到板子上：
+把编译好的 RISC-V 可执行文件和配置复制到板子上（**不需要复制 riscv-env/lib**，板子系统已有）：
 
 ```bash
-# 在 x86 主机上，把整个工程同步到板子（板子通过 ssh 连接）
+# 在 x86 主机上，把编译产物同步到板子（板子通过 ssh 连接）
 scp -r build-riscv/nr-softmodem build-riscv/nr-uesoftmodem \
   build-riscv/librfsimulator.so \
   ci-scripts/conf_files \
-  riscv-env/lib \
   user@<板子IP>:/opt/oai-riscv/
 ```
 
@@ -247,7 +268,8 @@ scp -r build-riscv/nr-softmodem build-riscv/nr-uesoftmodem \
 ```bash
 # 登录到板子
 ssh user@<板子IP>
-export LD_LIBRARY_PATH=/opt/oai-riscv/lib
+# 板子系统已经装好了库，设置系统库路径即可（不需要 riscv-env/lib）
+export LD_LIBRARY_PATH=/usr/lib:/usr/lib/riscv64-linux-gnu
 ```
 
 #### B.3 启动 gNB（基站）
