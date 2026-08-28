@@ -249,6 +249,24 @@ sudo ip link delete oaitun_ue1 2>/dev/null
 
 如果你用的是**真实的 RISC-V 硬件**（如进迭时空 SpacemiT K1/K3），CPU 本身就是 RISC-V，**不需要 QEMU**，直接在板子上原生运行。
 
+#### B.0 一键运行（推荐，K3 板子专用脚本）
+
+项目提供了 **`run_rfsim_k3.sh`**——专为真实 RISC-V 板子编写的一键脚本（**不需要 QEMU**，直接调用可执行文件）。
+
+**在 K3 板子上**（部署好文件后）：
+
+```bash
+cd /opt/oai-riscv
+sudo ./run_rfsim_k3.sh full      # 完整运行（gNB + UE + 路由）
+sudo ./run_rfsim_k3.sh status    # 查看状态
+sudo ./run_rfsim_k3.sh ping      # Ping 测试 + 5G 栈验证
+sudo ./run_rfsim_k3.sh stop      # 停止所有进程
+```
+
+> **注意**：
+> - `run_rfsim_k3.sh` 直接用系统库（`/usr/lib:/usr/lib/riscv64-linux-gnu`），**不需要 `riscv-env/lib/`**
+> - 与 `run_rfsim.sh`（QEMU 版）的区别：K3 版**去掉了 `qemu-riscv64`**，直接运行 `./nr-softmodem` 和 `./nr-uesoftmodem`
+
 #### B.1 把文件部署到板子
 
 把编译好的 RISC-V 可执行文件和配置复制到板子上（**不需要复制 riscv-env/lib**，板子系统已有）：
