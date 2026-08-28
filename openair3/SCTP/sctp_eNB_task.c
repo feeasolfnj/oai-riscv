@@ -405,11 +405,13 @@ sctp_handle_new_association_req(
                           sctp_new_association_req_p->in_streams,
                           sctp_new_association_req_p->out_streams,
                           SCTP_MAX_ATTEMPTS, SCTP_TIMEOUT) != 0) {
-        SCTP_ERROR("Setsockopt IPPROTO_SCTP_INITMSG failed: %s\n",
-                   strerror(errno));
-        itti_unsubscribe_event_fd(TASK_SCTP, sd);
-        close(sd);
-        return;
+        /* RISC-V/QEMU port: SCTP_INITMSG is a best-effort optimization
+         * (inbound stream count). Its absence (EPROTONOSUPPORT in QEMU
+         * user-mode) must NOT abort the connection setup -- the SCTP
+         * association still works with kernel defaults. Continue instead
+         * of closing the socket. */
+        SCTP_WARN("Setsockopt IPPROTO_SCTP_INITMSG failed (non-fatal): %s\n",
+                  strerror(errno));
     }
 
     /* Subscribe to all events */
@@ -423,10 +425,11 @@ sctp_handle_new_association_req(
 
     if (setsockopt(sd, IPPROTO_SCTP, SCTP_EVENTS, &events,
                    8) < 0) {
-        SCTP_ERROR("Setsockopt IPPROTO_SCTP_EVENTS failed: %s\n",
-                   strerror(errno));
-        close(sd);
-        return;
+        /* RISC-V/QEMU port: SCTP_EVENTS (event subscription) is not
+         * supported in QEMU user-mode (EPROTONOSUPPORT), but the SCTP
+         * association itself still works. Do not abort the connection. */
+        SCTP_WARN("Setsockopt IPPROTO_SCTP_EVENTS failed (non-fatal): %s\n",
+                  strerror(errno));
     }
 
     // Bind to device ... or we could bind to address also

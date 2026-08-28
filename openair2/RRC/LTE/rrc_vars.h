@@ -59,20 +59,22 @@ struct LTE_LogicalChannelConfig__ul_SpecificParameters LCSRB2 =  {3,
          &logicalChannelGroup0
 };
 
-/* ext1 wrapper removed: logicalChannelSR_Mask_r9 is a direct member of
- * LTE_LogicalChannelConfig_t (asn1c flattens ASN.1 extension members). */
+struct LTE_LogicalChannelConfig__ext1 logicalChannelSR_Mask_r9_ext1 = {
+.logicalChannelSR_Mask_r9=
+  &logicalChannelSR_Mask_r9
+};
 
 // These are the default SRB configurations from 36.331 (Chapter 9, p. 176-179 in v8.6)
 LTE_LogicalChannelConfig_t  SRB1_logicalChannelConfig_defaultValue = {.ul_SpecificParameters=
                                                                       &LCSRB1,
-                                                                      .logicalChannelSR_Mask_r9=
-                                                                      &logicalChannelSR_Mask_r9
+                                                                      .ext1=
+                                                                      &logicalChannelSR_Mask_r9_ext1
                                                                      };
 
 LTE_LogicalChannelConfig_t SRB2_logicalChannelConfig_defaultValue = {.ul_SpecificParameters=
                                                                      &LCSRB2,
-                                                                     .logicalChannelSR_Mask_r9=
-                                                                     &logicalChannelSR_Mask_r9
+                                                                     .ext1=
+                                                                     &logicalChannelSR_Mask_r9_ext1
                                                                     };
 
 //CONSTANTS

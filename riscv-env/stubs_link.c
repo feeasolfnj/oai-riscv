@@ -11,7 +11,6 @@
  * - __builtin_cpu_init / __builtin_cpu_supports: x86-only GCC builtins;
  *   reporting "no x86 feature" is the CORRECT behavior on RISC-V (OAI
  *   then selects portable code paths; SIMDE handles SIMD separately).
- * - s1ap_config: zero blob => mme_enabled==0 => EPC_MODE_ENABLED==false,
  *   exactly what --noS1 / rfsim wants. */
 #include <stddef.h>
 
@@ -29,21 +28,16 @@ typedef struct asn_dec_rval_stub_s {
     long consumed;    /* size_t */
 } asn_dec_rval_stub_t;
 
-asn_enc_rval_stub_t der_encode(void) {
-    asn_enc_rval_stub_t r; r.encoded = -1; r.failed_type = 0; r.structure_ptr = 0; return r;
-}
-asn_dec_rval_stub_t ber_decode(void) {
-    asn_dec_rval_stub_t r; r.code = 2; r._pad = 0; r.consumed = 0; return r;
-}
+/* NOTE: asn_imax2INTEGER / der_encode / ber_decode are provided by the real
+ * asn1c-generated runtime (INTEGER.c, OBJECT_IDENTIFIER.c, ENUMERATED.c), so
+ * they are intentionally NOT stubbed here to avoid duplicate definitions. */
 asn_dec_rval_stub_t ber_check_tags(void) {
     asn_dec_rval_stub_t r; r.code = 2; r._pad = 0; r.consumed = 0; return r;
 }
 long der_write_tags(void) { return -1; }
-int  asn_imax2INTEGER(void) { return -1; }
 
 void OPENSSL_assert(int e) { (void)e; }
 
 void __builtin_cpu_init(void) { /* no-op on RV64 */ }
 int  __builtin_cpu_supports(const char *feature) { (void)feature; return 0; }
 
-char s1ap_config[16384] = {0};

@@ -1287,7 +1287,7 @@ void nr_rrc_ue_process_securityModeCommand(const protocol_ctxt_t *const ctxt_pP,
     ul_dcch_msg.message.choice.c1->choice.securityModeComplete->criticalExtensions.choice.securityModeComplete->nonCriticalExtension =NULL;
     LOG_I(NR_RRC,"[UE %d] SFN/SF %d/%d: Receiving from SRB1 (DL-DCCH), encoding securityModeComplete (gNB %d), rrc_TransactionIdentifier: %ld\n",
           ctxt_pP->module_id,ctxt_pP->frame, ctxt_pP->subframe, gNB_index, securityModeCommand->rrc_TransactionIdentifier);
-    enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message,
+    enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL,
                                      (void *)&ul_dcch_msg,
                                      buffer,
                                      100);
@@ -2186,7 +2186,7 @@ nr_rrc_ue_process_ueCapabilityEnquiry(
   UECap->UE_NR_Capability = UE_Capability_nr;
   xer_fprint(stdout,&asn_DEF_NR_UE_NR_Capability,(void *)UE_Capability_nr);
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UE_NR_Capability,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UE_NR_Capability, NULL,
                                    (void *)UE_Capability_nr,
                                    &UECap->sdu[0],
                                    MAX_UE_NR_CAPABILITY_SIZE);
@@ -2224,7 +2224,7 @@ nr_rrc_ue_process_ueCapabilityEnquiry(
       asn1cSeqAdd(
         &ul_dcch_msg.message.choice.c1->choice.ueCapabilityInformation->criticalExtensions.choice.ueCapabilityInformation->ue_CapabilityRAT_ContainerList->list,
         &ue_CapabilityRAT_Container);
-      enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, (void *) &ul_dcch_msg, buffer, 500);
+      enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *) &ul_dcch_msg, buffer, 500);
       AssertFatal (enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %jd)!\n",
                    enc_rval.failed_type->name, enc_rval.encoded);
 
@@ -2309,7 +2309,7 @@ static void nsa_rrc_ue_process_ueCapabilityEnquiry(void)
   OAI_NR_UECapability_t *UECap = CALLOC(1, sizeof(OAI_NR_UECapability_t));
   UECap->UE_NR_Capability = UE_Capability_nr;
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UE_NR_Capability,
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UE_NR_Capability, NULL,
                                    (void *)UE_Capability_nr,
                                    &UECap->sdu[0],
                                    MAX_UE_NR_CAPABILITY_SIZE);

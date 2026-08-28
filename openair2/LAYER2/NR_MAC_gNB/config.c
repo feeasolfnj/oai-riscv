@@ -642,7 +642,7 @@ bool nr_mac_update_cellgroup(gNB_MAC_INST *nrmac, uint32_t rnti, NR_CellGroupCon
   /* copy CellGroup by calling asn1c encode this is a temporary hack to avoid the gNB having a pointer to RRC CellGroup structure
    * (otherwise it would be applied to early)
    * TODO remove once we have a proper implementation */
-  UE->enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig, (void *)CellGroup, UE->cg_buf, 32768);
+  UE->enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig, NULL, (void *)CellGroup, UE->cg_buf, 32768);
 
   if (UE->enc_rval.encoded == -1) {
     LOG_E(NR_MAC, "ASN1 message CellGroupConfig encoding failed (%s, %lu)!\n", UE->enc_rval.failed_type->name, UE->enc_rval.encoded);

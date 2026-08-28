@@ -1714,7 +1714,7 @@ int encode_MIB_NR(NR_BCCH_BCH_Message_t *mib, int frame, uint8_t *buf, int buf_s
   uint8_t sfn_msb = (uint8_t)((frame >> 4) & 0x3f);
   *mib->message.choice.mib->systemFrameNumber.buf = sfn_msb << 2;
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_BCCH_BCH_Message, mib, buf, buf_size);
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_BCCH_BCH_Message, NULL, mib, buf, buf_size);
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   LOG_D(NR_RRC, "Encoded MIB for frame %d sfn_msb %d, bits %lu\n", frame, sfn_msb, enc_rval.encoded);
   return (enc_rval.encoded + 7) / 8;
@@ -2028,7 +2028,7 @@ int encode_SIB1_NR(NR_BCCH_DL_SCH_Message_t *sib1, uint8_t *buffer, int max_buff
               "%s(): maximum buffer size too large: 3GPP TS 38.331 section 5.2.1 - The physical layer imposes a limit to the "
               "maximum size a SIB can take. The maximum SIB1 or SI message size is 2976 bits.\n",
               __func__);
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_BCCH_DL_SCH_Message, sib1, buffer, max_buffer_size);
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_BCCH_DL_SCH_Message, NULL, sib1, buffer, max_buffer_size);
   AssertFatal(enc_rval.encoded > 0 && enc_rval.encoded <= max_buffer_size * 8, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   return (enc_rval.encoded + 7) / 8;
 }
@@ -2471,7 +2471,7 @@ void free_cellGroupConfig(NR_CellGroupConfig_t *cellGroupConfig)
 
 int encode_cellGroupConfig(NR_CellGroupConfig_t *cellGroupConfig, uint8_t *buffer, int max_buffer_size)
 {
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig, cellGroupConfig, buffer, max_buffer_size);
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig, NULL, cellGroupConfig, buffer, max_buffer_size);
   AssertFatal(enc_rval.encoded > 0 && enc_rval.encoded <= max_buffer_size * 8,
               "ASN1 message encoding failed (%s, %lu)!\n",
               enc_rval.failed_type->name,

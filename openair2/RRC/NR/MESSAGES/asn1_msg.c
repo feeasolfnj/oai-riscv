@@ -232,7 +232,7 @@ uint8_t do_SIB23_NR(rrc_gNB_carrier_data_t *carrier,
 
   //encode SIB to data
   // carrier->SIB23 = (uint8_t *) malloc16(128);
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_BCCH_DL_SCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_BCCH_DL_SCH_Message, NULL,
                                    (void *)sib_message,
                                    carrier->SIB23,
                                    100);
@@ -279,7 +279,7 @@ int do_RRCReject(uint8_t Mod_id,
         xer_fprint(stdout, &asn_DEF_NR_DL_CCCH_Message, (void *)&dl_ccch_msg);
     }
 
-    enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message,
+    enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message, NULL,
                                     (void *)&dl_ccch_msg,
                                     buffer,
                                     100);
@@ -548,7 +548,7 @@ int do_RRCSetup(rrc_gNB_ue_context_t *const ue_context_pP,
     xer_fprint(stdout, &asn_DEF_NR_DL_CCCH_Message, (void *)&dl_ccch_msg);
   }
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message, (void *)&dl_ccch_msg, buffer, 1000);
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message, NULL, (void *)&dl_ccch_msg, buffer, 1000);
 
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
 
@@ -584,7 +584,7 @@ uint8_t do_NR_SecurityModeCommand(
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL,
                                    (void *)&dl_dcch_msg,
                                    buffer,
                                    100);
@@ -641,7 +641,7 @@ uint8_t do_NR_SA_UECapabilityEnquiry( const protocol_ctxt_t *const ctxt_pP,
 
   OCTET_STRING_t req_freq;
   unsigned char req_freq_buf[1024];
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UE_CapabilityRequestFilterNR,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UE_CapabilityRequestFilterNR, NULL,
 				   (void *)sa_band_filter,
 				   req_freq_buf,
 				   1024);
@@ -666,7 +666,7 @@ uint8_t do_NR_SA_UECapabilityEnquiry( const protocol_ctxt_t *const ctxt_pP,
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL,
                                    (void *)&dl_dcch_msg,
                                    buffer,
                                    100);
@@ -701,7 +701,7 @@ int do_NR_RRCRelease(uint8_t *buffer, size_t buffer_size, uint8_t Transaction_id
   rrcConnectionRelease->criticalExtensions.choice.rrcRelease->deprioritisationReq->deprioritisationTimer =
       NR_RRCRelease_IEs__deprioritisationReq__deprioritisationTimer_min10;
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL,
                                    (void *)&dl_dcch_msg,
                                    buffer,
                                    buffer_size);
@@ -779,7 +779,7 @@ int16_t do_RRCReconfiguration(
     if(cellGroupConfig!=NULL){
       update_cellGroupConfig(cellGroupConfig, ue_context_pP->ue_context.gNB_ue_ngap_id, ue_context_pP ? ue_context_pP->ue_context.UE_Capability_nr : NULL, configuration);
 
-      enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig,
+      enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig, NULL,
                                        (void *)cellGroupConfig,
                                        masterCellGroup_buf,
                                        1000);
@@ -800,7 +800,7 @@ int16_t do_RRCReconfiguration(
       xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
     }
 
-    enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message,
+    enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL,
                                      (void *)&dl_dcch_msg,
                                      buffer,
                                      buffer_size);
@@ -858,7 +858,7 @@ uint8_t do_RRCSetupRequest(uint8_t Mod_id, uint8_t *buffer, size_t buffer_size, 
     xer_fprint(stdout, &asn_DEF_NR_UL_CCCH_Message, (void *)&ul_ccch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_CCCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_CCCH_Message, NULL,
                                    (void *)&ul_ccch_msg,
                                    buffer,
                                    buffer_size);
@@ -889,7 +889,7 @@ do_NR_RRCReconfigurationComplete_for_nsa(
     xer_fprint(stdout, &asn_DEF_NR_RRCReconfigurationComplete, (void *)&rrc_complete_msg);
   }
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_RRCReconfigurationComplete,
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_RRCReconfigurationComplete, NULL,
                                                   (void *)&rrc_complete_msg,
                                                   buffer,
                                                   buffer_size);
@@ -928,7 +928,7 @@ do_NR_RRCReconfigurationComplete(
     xer_fprint(stdout, &asn_DEF_NR_UL_DCCH_Message, (void *)&ul_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL,
                                    (void *)&ul_dcch_msg,
                                    buffer,
                                    buffer_size);
@@ -978,7 +978,7 @@ uint8_t do_RRCSetupComplete(uint8_t Mod_id, uint8_t *buffer, size_t buffer_size,
     xer_fprint(stdout, &asn_DEF_NR_UL_DCCH_Message, (void *)&ul_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL,
                                    (void *)&ul_dcch_msg,
                                    buffer,
                                    buffer_size);
@@ -1077,7 +1077,7 @@ uint8_t do_RRCReestablishmentRequest(uint8_t Mod_id, uint8_t *buffer, uint16_t c
     xer_fprint(stdout, &asn_DEF_NR_UL_CCCH_Message, (void *)&ul_ccch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_CCCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_CCCH_Message, NULL,
                                    (void *)&ul_ccch_msg,
                                    buffer,
                                    100);
@@ -1135,7 +1135,7 @@ int do_RRCReestablishment(const protocol_ctxt_t *const ctxt_pP,
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg, buffer, 100);
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, 100);
 
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n",
               enc_rval.failed_type->name, enc_rval.encoded);
@@ -1167,7 +1167,7 @@ int do_RRCReestablishmentComplete(uint8_t *buffer, size_t buffer_size, int64_t r
     xer_fprint(stdout, &asn_DEF_NR_UL_CCCH_Message, (void *)&ul_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message,
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL,
                                    (void *)&ul_dcch_msg,
                                    buffer,
                                    buffer_size);
@@ -1286,8 +1286,7 @@ uint8_t do_NR_Paging(uint8_t Mod_id, uint8_t *buffer, uint32_t tmsi) {
   /* add to list */
   LOG_D(NR_RRC, "[gNB %d] do_Paging paging_record: PagingRecordList.count %d\n",
         Mod_id, c1->choice.paging->pagingRecordList->list.count);
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(
-      &asn_DEF_NR_PCCH_Message, (void *)&pcch_msg, buffer, RRC_BUF_SIZE);
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_PCCH_Message, NULL, (void *)&pcch_msg, buffer, RRC_BUF_SIZE);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_PCCH_Message, &pcch_msg);
   if(enc_rval.encoded == -1) {
     LOG_I(NR_RRC, "[gNB AssertFatal]ASN1 message encoding failed (%s, %lu)!\n",

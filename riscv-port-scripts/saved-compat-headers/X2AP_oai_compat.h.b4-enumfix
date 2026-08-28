@@ -1,0 +1,550 @@
+/* Auto-generated X2AP OAI compatibility header
+ *
+ * This header provides OAI-compatible type definitions for X2AP protocol.
+ * The generated asn1c code uses ANY_t for open types, but OAI source code
+ * expects union-based access (value.choice.X).
+ */
+#ifndef X2AP_OAI_COMPAT_H
+#define X2AP_OAI_COMPAT_H
+
+#include "constr_TYPE.h"
+#include <asn_application.h>
+#include <ANY.h>
+#include "OCTET_STRING.h"
+#include "BIT_STRING.h"
+#include "X2AP_ProcedureCode.h"
+#include "X2AP_Criticality.h"
+#include "X2AP_ProtocolIE-ID.h"
+#include "X2AP_Cause.h"
+#include "X2AP_TimeToWait.h"
+
+/* Include generated type headers for compound types used in unions */
+#include "X2AP_Cause.h"
+#include "X2AP_E-RABs-Admitted-Item.h"
+#include "X2AP_E-RABs-Admitted-List.h"
+#include "X2AP_E-RABs-Admitted-ToBeAdded-Item.h"
+#include "X2AP_E-RABs-Admitted-ToBeAdded-List.h"
+#include "X2AP_E-RABs-Admitted-ToBeAdded-SgNBAddReqAck-Item.h"
+#include "X2AP_E-RABs-Admitted-ToBeAdded-SgNBAddReqAckList.h"
+#include "X2AP_E-RABs-ToBeAdded-Item.h"
+#include "X2AP_E-RABs-ToBeAdded-List.h"
+#include "X2AP_E-RABs-ToBeAdded-SgNBAddReq-Item.h"
+#include "X2AP_E-RABs-ToBeAdded-SgNBAddReqList.h"
+#include "X2AP_E-RABs-ToBeSetup-Item.h"
+#include "X2AP_ECGI.h"
+#include "X2AP_ENDCX2SetupRequest.h"
+#include "X2AP_ENDCX2SetupResponse.h"
+#include "X2AP_GUGroupIDList.h"
+#include "X2AP_GUMMEI.h"
+#include "X2AP_GlobalENB-ID.h"
+#include "X2AP_GlobalGNB-ID.h"
+#include "X2AP_HandoverCancel.h"
+#include "X2AP_HandoverRequest.h"
+#include "X2AP_HandoverRequestAcknowledge.h"
+#include "X2AP_NRUESecurityCapabilities.h"
+#include "X2AP_ResetRequest.h"
+#include "X2AP_SeNBAdditionRequest.h"
+#include "X2AP_SeNBAdditionRequestAcknowledge.h"
+#include "X2AP_ServedCells.h"
+#include "X2AP_ServedEUTRAcellsENDCX2ManagementList.h"
+#include "X2AP_ServedNRcellsENDCX2ManagementList.h"
+#include "X2AP_SgNBAdditionRequest.h"
+#include "X2AP_SgNBAdditionRequestAcknowledge.h"
+#include "X2AP_SgNBReconfigurationComplete.h"
+#include "X2AP_SgNBReleaseConfirm.h"
+#include "X2AP_SgNBReleaseRequest.h"
+#include "X2AP_SgNBReleaseRequestAcknowledge.h"
+#include "X2AP_SgNBReleaseRequired.h"
+#include "X2AP_UE-ContextInformation.h"
+#include "X2AP_UE-HistoryInformation.h"
+#include "X2AP_UEAggregateMaximumBitRate.h"
+#include "X2AP_UEContextRelease.h"
+#include "X2AP_UESecurityCapabilities.h"
+#include "X2AP_X2SetupFailure.h"
+#include "X2AP_X2SetupRequest.h"
+#include "X2AP_X2SetupResponse.h"
+
+/* ============================================================
+ * Missing PR enum values
+ * ============================================================ */
+
+#ifndef X2AP_Cause_PR_misc
+#define X2AP_Cause_PR_misc 0
+#endif
+#ifndef X2AP_Cause_PR_protocol
+#define X2AP_Cause_PR_protocol 1
+#endif
+#ifndef X2AP_Cause_PR_radioNetwork
+#define X2AP_Cause_PR_radioNetwork 2
+#endif
+#ifndef X2AP_Cause_PR_transport
+#define X2AP_Cause_PR_transport 3
+#endif
+#ifndef X2AP_ENB_ENDCX2SetupReqAckIEs__value_PR_GlobalENB_ID
+#define X2AP_ENB_ENDCX2SetupReqAckIEs__value_PR_GlobalENB_ID 4
+#endif
+#ifndef X2AP_ENB_ENDCX2SetupReqAckIEs__value_PR_ServedEUTRAcellsENDCX2ManagementList
+#define X2AP_ENB_ENDCX2SetupReqAckIEs__value_PR_ServedEUTRAcellsENDCX2ManagementList 5
+#endif
+#ifndef X2AP_ENB_ID_PR_home_eNB_ID
+#define X2AP_ENB_ID_PR_home_eNB_ID 6
+#endif
+#ifndef X2AP_ENB_ID_PR_macro_eNB_ID
+#define X2AP_ENB_ID_PR_macro_eNB_ID 7
+#endif
+#ifndef X2AP_ENDCX2SetupRequest_IEs__value_PR_InitiatingNodeType_EndcX2Setup
+#define X2AP_ENDCX2SetupRequest_IEs__value_PR_InitiatingNodeType_EndcX2Setup 8
+#endif
+#ifndef X2AP_ENDCX2SetupResponse_IEs__value_PR_RespondingNodeType_EndcX2Setup
+#define X2AP_ENDCX2SetupResponse_IEs__value_PR_RespondingNodeType_EndcX2Setup 9
+#endif
+#ifndef X2AP_EUTRA_Mode_Info_PR_fDD
+#define X2AP_EUTRA_Mode_Info_PR_fDD 10
+#endif
+#ifndef X2AP_EUTRA_Mode_Info_PR_tDD
+#define X2AP_EUTRA_Mode_Info_PR_tDD 11
+#endif
+#ifndef X2AP_E_RABs_Admitted_ItemIEs__value_PR_E_RABs_Admitted_Item
+#define X2AP_E_RABs_Admitted_ItemIEs__value_PR_E_RABs_Admitted_Item 12
+#endif
+#ifndef X2AP_E_RABs_Admitted_ToBeAdded_ItemIEs__value_PR_E_RABs_Admitted_ToBeAdded_Item
+#define X2AP_E_RABs_Admitted_ToBeAdded_ItemIEs__value_PR_E_RABs_Admitted_ToBeAdded_Item 13
+#endif
+#ifndef X2AP_E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_ItemIEs__value_PR_E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_Item
+#define X2AP_E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_ItemIEs__value_PR_E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_Item 14
+#endif
+#ifndef X2AP_E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_Item__resource_configuration_PR_sgNBPDCPpresent
+#define X2AP_E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_Item__resource_configuration_PR_sgNBPDCPpresent 15
+#endif
+#ifndef X2AP_E_RABs_ToBeAdded_Item_PR_sCG_Bearer
+#define X2AP_E_RABs_ToBeAdded_Item_PR_sCG_Bearer 16
+#endif
+#ifndef X2AP_E_RABs_ToBeAdded_Item_PR_split_Bearer
+#define X2AP_E_RABs_ToBeAdded_Item_PR_split_Bearer 17
+#endif
+#ifndef X2AP_E_RABs_ToBeAdded_SgNBAddReq_ItemIEs__value_PR_E_RABs_ToBeAdded_SgNBAddReq_Item
+#define X2AP_E_RABs_ToBeAdded_SgNBAddReq_ItemIEs__value_PR_E_RABs_ToBeAdded_SgNBAddReq_Item 18
+#endif
+#ifndef X2AP_E_RABs_ToBeAdded_SgNBAddReq_Item__resource_configuration_PR_sgNBPDCPpresent
+#define X2AP_E_RABs_ToBeAdded_SgNBAddReq_Item__resource_configuration_PR_sgNBPDCPpresent 19
+#endif
+#ifndef X2AP_E_RABs_ToBeSetup_ItemIEs__value_PR_E_RABs_ToBeSetup_Item
+#define X2AP_E_RABs_ToBeSetup_ItemIEs__value_PR_E_RABs_ToBeSetup_Item 20
+#endif
+#ifndef X2AP_En_gNB_ENDCX2SetupReqIEs__value_PR_GlobalGNB_ID
+#define X2AP_En_gNB_ENDCX2SetupReqIEs__value_PR_GlobalGNB_ID 21
+#endif
+#ifndef X2AP_En_gNB_ENDCX2SetupReqIEs__value_PR_ServedNRcellsENDCX2ManagementList
+#define X2AP_En_gNB_ENDCX2SetupReqIEs__value_PR_ServedNRcellsENDCX2ManagementList 22
+#endif
+#ifndef X2AP_GNB_ID_PR_gNB_ID
+#define X2AP_GNB_ID_PR_gNB_ID 23
+#endif
+#ifndef X2AP_HandoverCancel_IEs__value_PR_Cause
+#define X2AP_HandoverCancel_IEs__value_PR_Cause 24
+#endif
+#ifndef X2AP_HandoverCancel_IEs__value_PR_UE_X2AP_ID
+#define X2AP_HandoverCancel_IEs__value_PR_UE_X2AP_ID 25
+#endif
+#ifndef X2AP_HandoverCancel_IEs__value_PR_UE_X2AP_ID_1
+#define X2AP_HandoverCancel_IEs__value_PR_UE_X2AP_ID_1 26
+#endif
+#ifndef X2AP_HandoverRequestAcknowledge_IEs__value_PR_E_RABs_Admitted_List
+#define X2AP_HandoverRequestAcknowledge_IEs__value_PR_E_RABs_Admitted_List 27
+#endif
+#ifndef X2AP_HandoverRequestAcknowledge_IEs__value_PR_TargeteNBtoSource_eNBTransparentContainer
+#define X2AP_HandoverRequestAcknowledge_IEs__value_PR_TargeteNBtoSource_eNBTransparentContainer 28
+#endif
+#ifndef X2AP_HandoverRequestAcknowledge_IEs__value_PR_UE_X2AP_ID
+#define X2AP_HandoverRequestAcknowledge_IEs__value_PR_UE_X2AP_ID 29
+#endif
+#ifndef X2AP_HandoverRequestAcknowledge_IEs__value_PR_UE_X2AP_ID_1
+#define X2AP_HandoverRequestAcknowledge_IEs__value_PR_UE_X2AP_ID_1 30
+#endif
+#ifndef X2AP_HandoverRequest_IEs__value_PR_Cause
+#define X2AP_HandoverRequest_IEs__value_PR_Cause 31
+#endif
+#ifndef X2AP_HandoverRequest_IEs__value_PR_ECGI
+#define X2AP_HandoverRequest_IEs__value_PR_ECGI 32
+#endif
+#ifndef X2AP_HandoverRequest_IEs__value_PR_GUMMEI
+#define X2AP_HandoverRequest_IEs__value_PR_GUMMEI 33
+#endif
+#ifndef X2AP_HandoverRequest_IEs__value_PR_UE_ContextInformation
+#define X2AP_HandoverRequest_IEs__value_PR_UE_ContextInformation 34
+#endif
+#ifndef X2AP_HandoverRequest_IEs__value_PR_UE_HistoryInformation
+#define X2AP_HandoverRequest_IEs__value_PR_UE_HistoryInformation 35
+#endif
+#ifndef X2AP_HandoverRequest_IEs__value_PR_UE_X2AP_ID
+#define X2AP_HandoverRequest_IEs__value_PR_UE_X2AP_ID 36
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_ENDCX2SetupRequest
+#define X2AP_InitiatingMessage__value_PR_ENDCX2SetupRequest 37
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_HandoverCancel
+#define X2AP_InitiatingMessage__value_PR_HandoverCancel 38
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_HandoverRequest
+#define X2AP_InitiatingMessage__value_PR_HandoverRequest 39
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_SeNBAdditionRequest
+#define X2AP_InitiatingMessage__value_PR_SeNBAdditionRequest 40
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_SgNBAdditionRequest
+#define X2AP_InitiatingMessage__value_PR_SgNBAdditionRequest 41
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_SgNBReconfigurationComplete
+#define X2AP_InitiatingMessage__value_PR_SgNBReconfigurationComplete 42
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_SgNBReleaseRequest
+#define X2AP_InitiatingMessage__value_PR_SgNBReleaseRequest 43
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_SgNBReleaseRequired
+#define X2AP_InitiatingMessage__value_PR_SgNBReleaseRequired 44
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_UEContextRelease
+#define X2AP_InitiatingMessage__value_PR_UEContextRelease 45
+#endif
+#ifndef X2AP_InitiatingMessage__value_PR_X2SetupRequest
+#define X2AP_InitiatingMessage__value_PR_X2SetupRequest 46
+#endif
+#ifndef X2AP_InitiatingNodeType_EndcX2Setup_PR_init_en_gNB
+#define X2AP_InitiatingNodeType_EndcX2Setup_PR_init_en_gNB 47
+#endif
+#ifndef X2AP_LastVisitedCell_Item_PR_e_UTRAN_Cell
+#define X2AP_LastVisitedCell_Item_PR_e_UTRAN_Cell 48
+#endif
+#ifndef X2AP_ResetRequest_IEs__value_PR_Cause
+#define X2AP_ResetRequest_IEs__value_PR_Cause 49
+#endif
+#ifndef X2AP_ResetRequest_IEs__value_PR_InterfaceInstanceIndication
+#define X2AP_ResetRequest_IEs__value_PR_InterfaceInstanceIndication 50
+#endif
+#ifndef X2AP_RespondingNodeType_EndcX2Setup_PR_respond_eNB
+#define X2AP_RespondingNodeType_EndcX2Setup_PR_respond_eNB 51
+#endif
+#ifndef X2AP_ResponseInformationSgNBReconfComp_PR_success_SgNBReconfComp
+#define X2AP_ResponseInformationSgNBReconfComp_PR_success_SgNBReconfComp 52
+#endif
+#ifndef X2AP_SeNBAdditionRequestAcknowledge_IEs__value_PR_E_RABs_Admitted_ToBeAdded_List
+#define X2AP_SeNBAdditionRequestAcknowledge_IEs__value_PR_E_RABs_Admitted_ToBeAdded_List 53
+#endif
+#ifndef X2AP_SeNBAdditionRequestAcknowledge_IEs__value_PR_SeNBtoMeNBContainer
+#define X2AP_SeNBAdditionRequestAcknowledge_IEs__value_PR_SeNBtoMeNBContainer 54
+#endif
+#ifndef X2AP_SeNBAdditionRequestAcknowledge_IEs__value_PR_UE_X2AP_ID
+#define X2AP_SeNBAdditionRequestAcknowledge_IEs__value_PR_UE_X2AP_ID 55
+#endif
+#ifndef X2AP_SeNBAdditionRequestAcknowledge_IEs__value_PR_UE_X2AP_ID_1
+#define X2AP_SeNBAdditionRequestAcknowledge_IEs__value_PR_UE_X2AP_ID_1 56
+#endif
+#ifndef X2AP_ServedNRCell_Information__nrModeInfo_PR_tdd
+#define X2AP_ServedNRCell_Information__nrModeInfo_PR_tdd 57
+#endif
+#ifndef X2AP_SgNBAdditionRequestAcknowledge_IEs__value_PR_E_RABs_Admitted_ToBeAdded_SgNBAddReqAckList
+#define X2AP_SgNBAdditionRequestAcknowledge_IEs__value_PR_E_RABs_Admitted_ToBeAdded_SgNBAddReqAckList 58
+#endif
+#ifndef X2AP_SgNBAdditionRequestAcknowledge_IEs__value_PR_SgNB_UE_X2AP_ID
+#define X2AP_SgNBAdditionRequestAcknowledge_IEs__value_PR_SgNB_UE_X2AP_ID 59
+#endif
+#ifndef X2AP_SgNBAdditionRequestAcknowledge_IEs__value_PR_SgNBtoMeNBContainer
+#define X2AP_SgNBAdditionRequestAcknowledge_IEs__value_PR_SgNBtoMeNBContainer 60
+#endif
+#ifndef X2AP_SgNBAdditionRequestAcknowledge_IEs__value_PR_UE_X2AP_ID
+#define X2AP_SgNBAdditionRequestAcknowledge_IEs__value_PR_UE_X2AP_ID 61
+#endif
+#ifndef X2AP_SgNBAdditionRequest_IEs__value_PR_E_RABs_ToBeAdded_SgNBAddReqList
+#define X2AP_SgNBAdditionRequest_IEs__value_PR_E_RABs_ToBeAdded_SgNBAddReqList 62
+#endif
+#ifndef X2AP_SgNBAdditionRequest_IEs__value_PR_MeNBtoSgNBContainer
+#define X2AP_SgNBAdditionRequest_IEs__value_PR_MeNBtoSgNBContainer 63
+#endif
+#ifndef X2AP_SgNBAdditionRequest_IEs__value_PR_NRUESecurityCapabilities
+#define X2AP_SgNBAdditionRequest_IEs__value_PR_NRUESecurityCapabilities 64
+#endif
+#ifndef X2AP_SgNBAdditionRequest_IEs__value_PR_SgNBSecurityKey
+#define X2AP_SgNBAdditionRequest_IEs__value_PR_SgNBSecurityKey 65
+#endif
+#ifndef X2AP_SgNBAdditionRequest_IEs__value_PR_UEAggregateMaximumBitRate
+#define X2AP_SgNBAdditionRequest_IEs__value_PR_UEAggregateMaximumBitRate 66
+#endif
+#ifndef X2AP_SgNBAdditionRequest_IEs__value_PR_UE_X2AP_ID
+#define X2AP_SgNBAdditionRequest_IEs__value_PR_UE_X2AP_ID 67
+#endif
+#ifndef X2AP_SgNBReconfigurationComplete_IEs__value_PR_ResponseInformationSgNBReconfComp
+#define X2AP_SgNBReconfigurationComplete_IEs__value_PR_ResponseInformationSgNBReconfComp 68
+#endif
+#ifndef X2AP_SgNBReconfigurationComplete_IEs__value_PR_SgNB_UE_X2AP_ID
+#define X2AP_SgNBReconfigurationComplete_IEs__value_PR_SgNB_UE_X2AP_ID 69
+#endif
+#ifndef X2AP_SgNBReconfigurationComplete_IEs__value_PR_UE_X2AP_ID
+#define X2AP_SgNBReconfigurationComplete_IEs__value_PR_UE_X2AP_ID 70
+#endif
+#ifndef X2AP_SgNBReleaseConfirm_IEs__value_PR_SgNB_UE_X2AP_ID
+#define X2AP_SgNBReleaseConfirm_IEs__value_PR_SgNB_UE_X2AP_ID 71
+#endif
+#ifndef X2AP_SgNBReleaseConfirm_IEs__value_PR_UE_X2AP_ID
+#define X2AP_SgNBReleaseConfirm_IEs__value_PR_UE_X2AP_ID 72
+#endif
+#ifndef X2AP_SgNBReleaseRequestAcknowledge_IEs__value_PR_SgNB_UE_X2AP_ID
+#define X2AP_SgNBReleaseRequestAcknowledge_IEs__value_PR_SgNB_UE_X2AP_ID 73
+#endif
+#ifndef X2AP_SgNBReleaseRequestAcknowledge_IEs__value_PR_UE_X2AP_ID
+#define X2AP_SgNBReleaseRequestAcknowledge_IEs__value_PR_UE_X2AP_ID 74
+#endif
+#ifndef X2AP_SgNBReleaseRequest_IEs__value_PR_Cause
+#define X2AP_SgNBReleaseRequest_IEs__value_PR_Cause 75
+#endif
+#ifndef X2AP_SgNBReleaseRequest_IEs__value_PR_SgNB_UE_X2AP_ID
+#define X2AP_SgNBReleaseRequest_IEs__value_PR_SgNB_UE_X2AP_ID 76
+#endif
+#ifndef X2AP_SgNBReleaseRequest_IEs__value_PR_UE_X2AP_ID
+#define X2AP_SgNBReleaseRequest_IEs__value_PR_UE_X2AP_ID 77
+#endif
+#ifndef X2AP_SgNBReleaseRequired_IEs__value_PR_Cause
+#define X2AP_SgNBReleaseRequired_IEs__value_PR_Cause 78
+#endif
+#ifndef X2AP_SgNBReleaseRequired_IEs__value_PR_SgNB_UE_X2AP_ID
+#define X2AP_SgNBReleaseRequired_IEs__value_PR_SgNB_UE_X2AP_ID 79
+#endif
+#ifndef X2AP_SgNBReleaseRequired_IEs__value_PR_UE_X2AP_ID
+#define X2AP_SgNBReleaseRequired_IEs__value_PR_UE_X2AP_ID 80
+#endif
+#ifndef X2AP_SuccessfulOutcome__value_PR_ENDCX2SetupResponse
+#define X2AP_SuccessfulOutcome__value_PR_ENDCX2SetupResponse 81
+#endif
+#ifndef X2AP_SuccessfulOutcome__value_PR_HandoverRequestAcknowledge
+#define X2AP_SuccessfulOutcome__value_PR_HandoverRequestAcknowledge 82
+#endif
+#ifndef X2AP_SuccessfulOutcome__value_PR_SeNBAdditionRequestAcknowledge
+#define X2AP_SuccessfulOutcome__value_PR_SeNBAdditionRequestAcknowledge 83
+#endif
+#ifndef X2AP_SuccessfulOutcome__value_PR_SgNBAdditionRequestAcknowledge
+#define X2AP_SuccessfulOutcome__value_PR_SgNBAdditionRequestAcknowledge 84
+#endif
+#ifndef X2AP_SuccessfulOutcome__value_PR_SgNBReleaseConfirm
+#define X2AP_SuccessfulOutcome__value_PR_SgNBReleaseConfirm 85
+#endif
+#ifndef X2AP_SuccessfulOutcome__value_PR_SgNBReleaseRequestAcknowledge
+#define X2AP_SuccessfulOutcome__value_PR_SgNBReleaseRequestAcknowledge 86
+#endif
+#ifndef X2AP_SuccessfulOutcome__value_PR_X2SetupResponse
+#define X2AP_SuccessfulOutcome__value_PR_X2SetupResponse 87
+#endif
+#ifndef X2AP_UEContextRelease_IEs__value_PR_UE_X2AP_ID
+#define X2AP_UEContextRelease_IEs__value_PR_UE_X2AP_ID 88
+#endif
+#ifndef X2AP_UEContextRelease_IEs__value_PR_UE_X2AP_ID_1
+#define X2AP_UEContextRelease_IEs__value_PR_UE_X2AP_ID_1 89
+#endif
+#ifndef X2AP_UnsuccessfulOutcome__value_PR_X2SetupFailure
+#define X2AP_UnsuccessfulOutcome__value_PR_X2SetupFailure 90
+#endif
+#ifndef X2AP_X2SetupFailure_IEs__value_PR_Cause
+#define X2AP_X2SetupFailure_IEs__value_PR_Cause 91
+#endif
+#ifndef X2AP_X2SetupFailure_IEs__value_PR_TimeToWait
+#define X2AP_X2SetupFailure_IEs__value_PR_TimeToWait 92
+#endif
+#ifndef X2AP_X2SetupRequest_IEs__value_PR_GUGroupIDList
+#define X2AP_X2SetupRequest_IEs__value_PR_GUGroupIDList 93
+#endif
+#ifndef X2AP_X2SetupRequest_IEs__value_PR_GlobalENB_ID
+#define X2AP_X2SetupRequest_IEs__value_PR_GlobalENB_ID 94
+#endif
+#ifndef X2AP_X2SetupRequest_IEs__value_PR_ServedCells
+#define X2AP_X2SetupRequest_IEs__value_PR_ServedCells 95
+#endif
+#ifndef X2AP_X2SetupResponse_IEs__value_PR_GUGroupIDList
+#define X2AP_X2SetupResponse_IEs__value_PR_GUGroupIDList 96
+#endif
+#ifndef X2AP_X2SetupResponse_IEs__value_PR_GlobalENB_ID
+#define X2AP_X2SetupResponse_IEs__value_PR_GlobalENB_ID 97
+#endif
+#ifndef X2AP_X2SetupResponse_IEs__value_PR_ServedCells
+#define X2AP_X2SetupResponse_IEs__value_PR_ServedCells 98
+#endif
+
+/* ============================================================
+ * Missing Cause constants
+ * ============================================================ */
+
+#ifndef X2AP_CauseMisc_unspecified
+#define X2AP_CauseMisc_unspecified 0
+#endif
+#ifndef X2AP_CauseProtocol_unspecified
+#define X2AP_CauseProtocol_unspecified 0
+#endif
+#ifndef X2AP_CauseRadioNetwork_handover_desirable_for_radio_reasons
+#define X2AP_CauseRadioNetwork_handover_desirable_for_radio_reasons 0
+#endif
+#ifndef X2AP_CauseRadioNetwork_radio_connection_with_UE_lost
+#define X2AP_CauseRadioNetwork_radio_connection_with_UE_lost 1
+#endif
+#ifndef X2AP_CauseRadioNetwork_tDCoverall_expiry
+#define X2AP_CauseRadioNetwork_tDCoverall_expiry 6
+#endif
+#ifndef X2AP_CauseRadioNetwork_tDCprep_expiry
+#define X2AP_CauseRadioNetwork_tDCprep_expiry 5
+#endif
+#ifndef X2AP_CauseRadioNetwork_trelocprep_expiry
+#define X2AP_CauseRadioNetwork_trelocprep_expiry 3
+#endif
+#ifndef X2AP_CauseRadioNetwork_tx2relocoverall_expiry
+#define X2AP_CauseRadioNetwork_tx2relocoverall_expiry 4
+#endif
+
+/* ============================================================
+ * ServedCells__Member type
+ * ============================================================ */
+
+#include "X2AP_ServedCells.h"
+
+/* ============================================================
+ * Missing CHOICE type definitions (needed before union)
+ * ============================================================ */
+
+/* Generic sequence list type (compatible with asn_anonymous_sequence_) */
+typedef struct X2AP_generic_seq {
+    void **array;
+    int count;
+    int size;
+} X2AP_generic_seq_t;
+
+typedef struct X2AP_InitiatingNodeType_EndcX2Setup {
+    long present;
+    union {
+        struct { X2AP_generic_seq_t list; } init_en_gNB;
+    } choice;
+} X2AP_InitiatingNodeType_EndcX2Setup_t;
+
+typedef struct X2AP_RespondingNodeType_EndcX2Setup {
+    long present;
+    union {
+        struct { X2AP_generic_seq_t list; } respond_eNB;
+    } choice;
+} X2AP_RespondingNodeType_EndcX2Setup_t;
+
+typedef struct X2AP_ResponseInformationSgNBReconfComp {
+    long present;
+    union {
+        struct { OCTET_STRING_t *meNBtoSgNBContainer; } success_SgNBReconfComp;
+    } choice;
+} X2AP_ResponseInformationSgNBReconfComp_t;
+
+/* ============================================================
+ * IE value union - OAI accesses value.choice.X
+ * ============================================================ */
+
+typedef struct X2AP_IE_Value {
+    long present;  /* discriminator */
+    union X2AP_IE_Value_u {
+        void *ptr;
+
+        X2AP_Cause_t Cause;
+        X2AP_ECGI_t ECGI;
+        X2AP_ENDCX2SetupRequest_t ENDCX2SetupRequest;
+        X2AP_ENDCX2SetupResponse_t ENDCX2SetupResponse;
+        X2AP_E_RABs_Admitted_Item_t E_RABs_Admitted_Item;
+        X2AP_E_RABs_Admitted_List_t E_RABs_Admitted_List;
+        X2AP_E_RABs_Admitted_ToBeAdded_Item_t E_RABs_Admitted_ToBeAdded_Item;
+        X2AP_E_RABs_Admitted_ToBeAdded_List_t E_RABs_Admitted_ToBeAdded_List;
+        X2AP_E_RABs_Admitted_ToBeAdded_SgNBAddReqAckList_t E_RABs_Admitted_ToBeAdded_SgNBAddReqAckList;
+        X2AP_E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_Item_t E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_Item;
+        X2AP_E_RABs_ToBeAdded_Item_t E_RABs_ToBeAdded_Item;
+        X2AP_E_RABs_ToBeAdded_List_t E_RABs_ToBeAdded_List;
+        X2AP_E_RABs_ToBeAdded_SgNBAddReqList_t E_RABs_ToBeAdded_SgNBAddReqList;
+        X2AP_E_RABs_ToBeAdded_SgNBAddReq_Item_t E_RABs_ToBeAdded_SgNBAddReq_Item;
+        X2AP_E_RABs_ToBeSetup_Item_t E_RABs_ToBeSetup_Item;
+        X2AP_GUGroupIDList_t GUGroupIDList;
+        X2AP_GUMMEI_t GUMMEI;
+        X2AP_GlobalENB_ID_t GlobalENB_ID;
+        X2AP_GlobalGNB_ID_t GlobalGNB_ID;
+        X2AP_HandoverCancel_t HandoverCancel;
+        X2AP_HandoverRequest_t HandoverRequest;
+        X2AP_HandoverRequestAcknowledge_t HandoverRequestAcknowledge;
+        X2AP_InitiatingNodeType_EndcX2Setup_t InitiatingNodeType_EndcX2Setup;
+        OCTET_STRING_t MeNBtoSeNBContainer;
+        OCTET_STRING_t MeNBtoSgNBContainer;
+        X2AP_NRUESecurityCapabilities_t NRUESecurityCapabilities;
+        X2AP_ResetRequest_t ResetRequest;
+        X2AP_RespondingNodeType_EndcX2Setup_t RespondingNodeType_EndcX2Setup;
+        X2AP_ResponseInformationSgNBReconfComp_t ResponseInformationSgNBReconfComp;
+        X2AP_SeNBAdditionRequest_t SeNBAdditionRequest;
+        X2AP_SeNBAdditionRequestAcknowledge_t SeNBAdditionRequestAcknowledge;
+        BIT_STRING_t SeNBSecurityKey;
+        OCTET_STRING_t SeNBtoMeNBContainer;
+        X2AP_ServedCells_t ServedCells;
+        X2AP_ServedEUTRAcellsENDCX2ManagementList_t ServedEUTRAcellsENDCX2ManagementList;
+        X2AP_ServedNRcellsENDCX2ManagementList_t ServedNRcellsENDCX2ManagementList;
+        X2AP_SgNBAdditionRequest_t SgNBAdditionRequest;
+        X2AP_SgNBAdditionRequestAcknowledge_t SgNBAdditionRequestAcknowledge;
+        X2AP_SgNBReconfigurationComplete_t SgNBReconfigurationComplete;
+        X2AP_SgNBReleaseConfirm_t SgNBReleaseConfirm;
+        X2AP_SgNBReleaseRequest_t SgNBReleaseRequest;
+        X2AP_SgNBReleaseRequestAcknowledge_t SgNBReleaseRequestAcknowledge;
+        X2AP_SgNBReleaseRequired_t SgNBReleaseRequired;
+        BIT_STRING_t SgNBSecurityKey;
+        long SgNB_UE_X2AP_ID;
+        OCTET_STRING_t SgNBtoMeNBContainer;
+        OCTET_STRING_t TargeteNBtoSource_eNBTransparentContainer;
+        X2AP_TimeToWait_t TimeToWait;
+        X2AP_UEAggregateMaximumBitRate_t UEAggregateMaximumBitRate;
+        X2AP_UEContextRelease_t UEContextRelease;
+        X2AP_UESecurityCapabilities_t UESecurityCapabilities;
+        X2AP_UE_ContextInformation_t UE_ContextInformation;
+        X2AP_UE_HistoryInformation_t UE_HistoryInformation;
+        long UE_X2AP_ID;
+        long UE_X2AP_ID_1;
+        X2AP_X2SetupFailure_t X2SetupFailure;
+        X2AP_X2SetupRequest_t X2SetupRequest;
+        X2AP_X2SetupResponse_t X2SetupResponse;
+    } choice;
+} X2AP_IE_Value_t;
+
+/* ============================================================
+ * struct X2AP_ProtocolIE_Field - complete definition
+ * The generated containers use A_SEQUENCE_OF(struct X2AP_ProtocolIE_Field)
+ * ============================================================ */
+
+struct X2AP_ProtocolIE_Field {
+    X2AP_ProtocolIE_ID_t     id;
+    X2AP_Criticality_t       criticality;
+    X2AP_IE_Value_t  value;
+    asn_struct_ctx_t _asn_ctx;
+};
+typedef struct X2AP_ProtocolIE_Field X2AP_ProtocolIE_Field_t;
+
+typedef X2AP_ProtocolIE_Field_t X2AP_ENB_ENDCX2SetupReqAckIEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_ENDCX2SetupRequest_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_ENDCX2SetupResponse_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_E_RABs_Admitted_ItemIEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_E_RABs_Admitted_ToBeAdded_ItemIEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_E_RABs_Admitted_ToBeAdded_SgNBAddReqAck_ItemIEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_E_RABs_ToBeAdded_ItemIEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_E_RABs_ToBeAdded_SgNBAddReq_ItemIEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_E_RABs_ToBeSetup_ItemIEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_En_gNB_ENDCX2SetupReqIEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_HandoverCancel_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_HandoverRequestAcknowledge_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_HandoverRequest_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_ResetRequest_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SeNBAdditionRequestAcknowledge_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SeNBAdditionRequest_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SgNBAdditionRequestAcknowledge_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SgNBAdditionRequest_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SgNBReconfigurationComplete_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SgNBReleaseConfirm_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SgNBReleaseRequestAcknowledge_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SgNBReleaseRequest_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_SgNBReleaseRequired_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_UEContextRelease_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_X2SetupFailure_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_X2SetupRequest_IEs_t;
+typedef X2AP_ProtocolIE_Field_t X2AP_X2SetupResponse_IEs_t;
+
+/* Note: asn1cSeqAdd and asn1cSequenceAdd macros are defined in oai_asn1.h
+ * Do not redefine them here. */
+
+#endif /* X2AP_OAI_COMPAT_H */

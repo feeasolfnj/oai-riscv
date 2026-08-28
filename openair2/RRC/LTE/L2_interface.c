@@ -155,7 +155,7 @@ mac_rrc_data_req(
 
   if( (Srb_id & RAB_OFFSET ) == MIBCH) {
     mib->message.systemFrameNumber.buf = &sfn;
-    enc_rval = uper_encode_to_buffer(&asn_DEF_LTE_BCCH_BCH_Message,
+    enc_rval = uper_encode_to_buffer(&asn_DEF_LTE_BCCH_BCH_Message, NULL,
                                      (void *)mib,
                                      carrier->MIB,
                                      24);
@@ -170,7 +170,7 @@ mac_rrc_data_req(
 
   if( (Srb_id & RAB_OFFSET ) == MIBCH_MBMS) {
     mib_fembms->message.systemFrameNumber_r14.buf = &sfn_fembms;
-    enc_rval = uper_encode_to_buffer(&asn_DEF_LTE_BCCH_BCH_Message_MBMS,
+    enc_rval = uper_encode_to_buffer(&asn_DEF_LTE_BCCH_BCH_Message_MBMS, NULL,
                                      (void *)mib_fembms,
                                      carrier->MIB_FeMBMS,
                                      24);

@@ -138,7 +138,7 @@ void ue_context_setup_request(const f1ap_ue_context_setup_t *req)
   AssertFatal(resp.du_to_cu_rrc_information != NULL, "out of memory\n");
   resp.du_to_cu_rrc_information->cellGroupConfig = calloc(1,1024);
   AssertFatal(resp.du_to_cu_rrc_information->cellGroupConfig != NULL, "out of memory\n");
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig,
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig, NULL,
                                                   UE->CellGroup,
                                                   resp.du_to_cu_rrc_information->cellGroupConfig,
                                                   1024);
@@ -214,7 +214,7 @@ void ue_context_modification_request(const f1ap_ue_context_modif_req_t *req)
     AssertFatal(resp.du_to_cu_rrc_information != NULL, "out of memory\n");
     resp.du_to_cu_rrc_information->cellGroupConfig = calloc(1, 1024);
     AssertFatal(resp.du_to_cu_rrc_information->cellGroupConfig != NULL, "out of memory\n");
-    asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig,
+    asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_CellGroupConfig, NULL,
                                                     UE->CellGroup,
                                                     resp.du_to_cu_rrc_information->cellGroupConfig,
                                                     1024);

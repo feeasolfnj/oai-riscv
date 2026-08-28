@@ -1,4 +1,5 @@
 build/
+build-riscv/
 cmake_targets/Logs/
 *.o
 *.a
@@ -8,3 +9,19 @@ target/
 *.zip
 *.tar.gz
 .upstream_oai_compare/
+
+# RISC-V port: build artifacts and generated SIMD
+extra/sse2rvv/
+riscv-env/lib/
+riscv-env/stubs_link.o
+riscv-env/include/
+riscv-env/stubs.o
+
+# personal reports / temp
+*.pptx
+REPORT.md
+PERSONAL_REPORT.md
+make_ppt.py
+.vscode/
+__pycache__/
+riscv-port-scripts/__pycache__/

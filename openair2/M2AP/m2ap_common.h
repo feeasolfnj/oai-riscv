@@ -39,14 +39,6 @@
  * here so the no-op stubs (which include only m2ap_common.h + the specific
  * header) resolve all types. */
 #include "M2AP_Cause.h"
-/* RISC-V port: the mouse07410 asn1c run for M2AP emitted the CHOICE enum
- * typedef as the non-compound `Cause_PR` (enum members are prefixed
- * M2AP_Cause_PR_*, but the type is just Cause_PR), whereas the S1AP run used
- * the compound name S1AP_Cause_PR. OAI's M2AP source expects the compound type
- * name M2AP_Cause_PR (e.g. m2ap_eNB_set_cause's `M2AP_Cause_PR cause_type`
- * parameter). Alias the compound name to the generated type so the source
- * compiles unchanged. */
-typedef Cause_PR M2AP_Cause_PR;
 #include "M2AP_Reset.h"
 #include "M2AP_ResetAcknowledge.h"
 #include "M2AP_ErrorIndication.h"
