@@ -47,21 +47,20 @@ sudo apt install -y gcc g++ make cmake git python3 \
   libconfig-dev libsctp-dev libz-dev libopenblas-dev libgfortran5
 ```
 
-### 第 2 步：安装 asn1c（必须用 mouse07410 分支，支持 OAI 的 -gen-APER/-gen-UPER）
+### 第 2 步：安装 asn1c（必须用 mouse07410 分支的 `940dd5fa`，支持 -gen-APER 且生成完整 S1AP 布局）
 
 > **⚠️ 重要**：OAI 的 CMake 使用 `-gen-APER` / `-no-gen-UPER` / `-no-gen-JER` 等新版 flags。
-> **`vlm/asn1c`（官方标准版）的 `v0.9.29` 标签不支持这些 flags**，会导致编译在 ASN.1 阶段直接失败：
-> ```
-> -gen-APER: Invalid argument
-> make[3]: *** [.../ANY_aper.c] 错误 64
-> ```
-> **必须使用 `mouse07410/asn1c` 仓库的 `844f9ca` commit**（该版本支持上述 flags）。
+> 需要两个条件同时满足，否则编译失败：
+> 1. **支持 `-gen-APER`**：`vlm/asn1c`（标准版）`v0.9.29` 标签**不支持**，报 `-gen-APER: Invalid argument`。
+> 2. **生成完整 S1AP 布局**：mouse07410 的 `844f9ca` commit 虽支持 `-gen-APER`，但生成的 S1AP 类型是**不完整前向声明**，报 `error: field '...' has incomplete type`。
+>
+> **必须使用 `mouse07410/asn1c` 仓库的 `940dd5fa` commit**——它同时满足上述两个条件（支持 `-gen-APER`，且生成完整 S1AP 布局）。
 
 ```bash
 cd /tmp
 git clone https://github.com/mouse07410/asn1c.git
 cd asn1c
-git checkout 844f9ca        # 关键：支持 -gen-APER / -gen-UPER 的 commit
+git checkout 940dd5fa        # 关键：支持 -gen-APER 且生成完整 S1AP 布局的 commit
 autoreconf -fi
 ./configure
 make -j$(nproc)
@@ -75,8 +74,9 @@ asn1c -h | grep -E "no-gen-UPER|no-gen-APER"   # 有输出 = 支持 OAI flags（
 asn1c -gen-APER >/dev/null 2>&1; echo $?       # 退出码=1 正常；=64 说明不支持（装错了）
 ```
 
-> **排查**：如果 `asn1c -gen-APER` 退出码是 `64`（报 `Invalid argument`），说明 asn1c 版本不对。
-> 请卸载后重新按上面步骤安装，并确认 `git checkout` 成功（HEAD 在 `844f9ca`）。
+> **排查**：
+> - 如果 `asn1c -gen-APER` 退出码是 `64`（报 `Invalid argument`）→ asn1c 不支持 flags，重新装。
+> - 如果编译报 `field 'E_RABSubjecttoDataForwardingList' has incomplete type` → asn1c 版本不对（用了 `844f9ca`），改成 `940dd5fa` 重装。
 
 ### 第 3 步：克隆本仓库
 
@@ -230,7 +230,11 @@ sudo ./build-riscv/nr-softmodem \
 
 ### Q0: 编译报 `-gen-APER: Invalid argument` / `ANY_aper.c] 错误 64`
 **asn1c 版本不对**。OAI 的 CMake 需要 `-gen-APER`/`-no-gen-UPER` 等新版 flags，但 `vlm/asn1c` 标准版 `v0.9.29` 不支持。
-**解决**：按"第三节第 2 步"安装 `mouse07410/asn1c` 的 `844f9ca` commit（不要用 `v0.9.29` 标签）。装完用 `asn1c -gen-APER` 验证（退出码应为 1，不是 64）。
+**解决**：按"第三节第 2 步"安装 `mouse07410/asn1c` 的 `940dd5fa` commit（不要用 `v0.9.29` 标签，也不要只用 `844f9ca`——它虽支持 flags 但 S1AP 布局不完整）。装完用 `asn1c -gen-APER` 验证（退出码应为 1，不是 64）。
+
+### Q0.1: 编译报 `field 'E_RABSubjecttoDataForwardingList' has incomplete type`
+**asn1c 版本生成 S1AP 布局不完整**。`844f9ca` commit 生成的 `S1AP_E-RAB-IE-ContainerList.h` 里 `typedef struct S1AP_ProtocolIE_ContainerList` 是前向声明，未定义。
+**解决**：改用 `940dd5fa` commit 重新编译 asn1c（该版本 typedef 到完整类型 `S1AP_ProtocolIE_ContainerList_7313P0_t`）。
 
 ### Q1: 编译报 `relocation truncated to fit: R_RISCV_JAL`
 大文件 JAL 跳转超范围。用 `-Os -fno-unroll-loops` 编译该文件。
