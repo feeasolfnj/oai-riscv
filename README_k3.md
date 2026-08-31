@@ -85,36 +85,49 @@ git clone https://github.com/feeasolfnj/oai-riscv.git
 cd oai-riscv
 ```
 
-### 第 4 步：准备 stubs_link.o（K3 板子用系统 gcc）
+### 第 4 步：一键配置（推荐，用仓库附带的预生成 ASN.1 代码）
+
+> **⭐ 为什么这样做**：OAI 的 ASN.1 代码（S1AP/X2AP/NGAP 等）由 asn1c 生成，但**生成代码必须和手写代码严格匹配**（compat 头 + 适配）。直接 `make` 会让 asn1c 重新生成代码，导致"生成代码布局不匹配"的编译错误。
+>
+> 本仓库附带了一套**已验证可编译**的预生成代码（`prebuilt-asn1c/`）。执行下面的脚本，它会自动解压预生成代码、配置 CMake、准备 stubs，然后你直接 `make` 就能成功。
 
 ```bash
-cd cmake_targets
-gcc -c -march=rv64gcv -mabi=lp64d \
-  -isystem ../cmake_targets/riscv64-stubs/include \
-  ../riscv-env/stubs_link.c -o ../riscv-env/stubs_link.o
-cd ..
+./setup_prebuilt.sh
 ```
 
-### 第 5 步：配置 CMake（原生编译，不用交叉编译链）
+> 脚本会：① 配置 CMake → ② 解压预生成 ASN.1 代码到 build-riscv → ③ 标记为最新（跳过 asn1c 重新生成）→ ④ 准备 stubs_link.o。
+
+### 第 5 步：编译
 
 ```bash
-mkdir -p build-riscv && cd build-riscv
-cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
-```
-
-> **关键区别**：K3 板子上原生编译**不需要 `-DCMAKE_TOOLCHAIN_FILE`**（因为本地就是 riscv64）。
-
-### 第 6 步：编译
-
-```bash
+cd build-riscv
 make nr-softmodem -j$(nproc)    # 编译 gNB（基站）
 make nr-uesoftmodem -j$(nproc)  # 编译 UE（终端）
 make rfsimulator -j$(nproc)     # 编译 rfsim 库
 ```
 
-### 第 7 步：把 stubs_link.o 加入链接命令（务必）
+> **如果 asn1c 重新生成了代码导致报错**（如 `incomplete type`、`value.choice.X` 不匹配）：重新执行 `./setup_prebuilt.sh` 再 make，或用下面第 6 步手动恢复。
+
+### 第 6 步：（可选）手动恢复预生成代码
+
+如果你修改了源码触发 asn1c 重新生成，或 make 报生成代码不匹配错误：
 
 ```bash
+# 重新解压预生成代码 + 标记最新，再 make
+cd ~/oai-riscv
+tar xzf prebuilt-asn1c/oai-asn1c-prebuilt-20260830.tar.gz
+find build-riscv/openair1 build-riscv/openair2 build-riscv/openair3 \
+  -path "*MESSAGES*" \( -name "*.c" -o -name "*.h" \) -exec touch {} +
+cd build-riscv
+make nr-softmodem -j$(nproc)
+```
+
+### 第 7 步：把 stubs_link.o 加入链接命令（务必）
+
+> **作用**：RISC-V 上缺 `__builtin_cpu_init` / `s1ap_config` 等符号，需要把 `stubs_link.o` 加进链接命令，否则报 `undefined reference`。
+
+```bash
+# 把 <USER> 替换成你的用户名
 sed -i 's|CMakeFiles/nr-softmodem.dir/executables/nr-gnb.c.o|/home/<USER>/oai-riscv/riscv-env/stubs_link.o CMakeFiles/nr-softmodem.dir/executables/nr-gnb.c.o|' \
   build-riscv/CMakeFiles/nr-softmodem.dir/link.txt
 
@@ -122,7 +135,12 @@ sed -i 's|CMakeFiles/nr-uesoftmodem.dir/executables/nr-ue.c.o|/home/<USER>/oai-r
   build-riscv/CMakeFiles/nr-uesoftmodem.dir/link.txt
 ```
 
-> 把 `<USER>` 替换成你的用户名。然后重新 `make nr-softmodem nr-uesoftmodem`。
+然后重新 `make`：
+```bash
+cd build-riscv
+make nr-softmodem -j$(nproc)
+make nr-uesoftmodem -j$(nproc)
+```
 
 ### 第 8 步：大文件编译优化（解决 JAL 跳转截断）
 
@@ -247,6 +265,19 @@ sudo ./build-riscv/nr-softmodem \
 
 ### Q4: gNB 启动崩溃
 检查库是否装齐、是否用 `sudo`。
+
+### Q5: make 报 `incomplete type` / `value.choice.X` 不匹配 / `conflicting types`
+**asn1c 重新生成了代码，和手写代码布局不匹配**（常见于修改源码或首次 make 触发重新生成）。
+**解决**：重新解压仓库附带的预生成代码并标记为最新，然后重新 make：
+```bash
+cd ~/oai-riscv
+tar xzf prebuilt-asn1c/oai-asn1c-prebuilt-20260830.tar.gz
+find build-riscv/openair1 build-riscv/openair2 build-riscv/openair3 \
+  -path "*MESSAGES*" \( -name "*.c" -o -name "*.h" \) -exec touch {} +
+cd build-riscv
+make nr-softmodem -j$(nproc)
+```
+> 推荐：直接用 `./setup_prebuilt.sh`（它会自动完成上述恢复 + 配置）。
 
 ---
 

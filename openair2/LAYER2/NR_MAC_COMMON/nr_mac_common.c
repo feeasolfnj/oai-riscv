@@ -2054,8 +2054,8 @@ uint8_t compute_nr_root_seq(NR_RACH_ConfigCommon_t *rach_config,
                             uint8_t unpaired,
 			    frequency_range_t frequency_range) {
 
-  uint8_t config_index = rach_config->rach_ConfigGeneric.prach_ConfigurationIndex;
-  uint8_t ncs_index = rach_config->rach_ConfigGeneric.zeroCorrelationZoneConfig;
+  uint8_t config_index = rach_config->rach_ConfigGeneric->prach_ConfigurationIndex;
+  uint8_t ncs_index = rach_config->rach_ConfigGeneric->zeroCorrelationZoneConfig;
   uint16_t format0 = get_format0(config_index, unpaired, frequency_range);
   uint16_t NCS = get_NCS(ncs_index, format0, rach_config->restrictedSetConfig);
   uint16_t L_ra = (rach_config->prach_RootSequenceIndex.present==NR_RACH_ConfigCommon__prach_RootSequenceIndex_PR_l139) ? 139 : 839;
@@ -3645,10 +3645,10 @@ bool is_nr_DL_slot(NR_TDD_UL_DL_ConfigCommon_t *tdd_UL_DL_ConfigurationCommon,sl
     return true;
 
   int period1, period2 = 0;
-  if (tdd_UL_DL_ConfigurationCommon->pattern1.dl_UL_TransmissionPeriodicity_v1530)
-    period1 = 3000+*tdd_UL_DL_ConfigurationCommon->pattern1.dl_UL_TransmissionPeriodicity_v1530;
+  if (tdd_UL_DL_ConfigurationCommon->pattern1->dl_UL_TransmissionPeriodicity_v1530)
+    period1 = 3000+*tdd_UL_DL_ConfigurationCommon->pattern1->dl_UL_TransmissionPeriodicity_v1530;
   else
-    period1 = tdd_period_to_num[tdd_UL_DL_ConfigurationCommon->pattern1.dl_UL_TransmissionPeriodicity];
+    period1 = tdd_period_to_num[tdd_UL_DL_ConfigurationCommon->pattern1->dl_UL_TransmissionPeriodicity];
 			       
   if (tdd_UL_DL_ConfigurationCommon->pattern2) {
     if (tdd_UL_DL_ConfigurationCommon->pattern2->dl_UL_TransmissionPeriodicity_v1530)
@@ -3662,7 +3662,7 @@ bool is_nr_DL_slot(NR_TDD_UL_DL_ConfigCommon_t *tdd_UL_DL_ConfigurationCommon,sl
   int slots1 = period1 * (1 << scs) / 1000;
   int slot_in_period = slot % slots;
   if (slot_in_period < slots1)
-    return slot_in_period <= tdd_UL_DL_ConfigurationCommon->pattern1.nrofDownlinkSlots;
+    return slot_in_period <= tdd_UL_DL_ConfigurationCommon->pattern1->nrofDownlinkSlots;
   else
     return slot_in_period <= slots1 + tdd_UL_DL_ConfigurationCommon->pattern2->nrofDownlinkSlots;
 }
@@ -3678,10 +3678,10 @@ bool is_nr_UL_slot(NR_TDD_UL_DL_ConfigCommon_t *tdd_UL_DL_ConfigurationCommon, s
     return false;
 
   int period1, period2 = 0;
-  if (tdd_UL_DL_ConfigurationCommon->pattern1.dl_UL_TransmissionPeriodicity_v1530)
-    period1 = 3000 + *tdd_UL_DL_ConfigurationCommon->pattern1.dl_UL_TransmissionPeriodicity_v1530;
+  if (tdd_UL_DL_ConfigurationCommon->pattern1->dl_UL_TransmissionPeriodicity_v1530)
+    period1 = 3000 + *tdd_UL_DL_ConfigurationCommon->pattern1->dl_UL_TransmissionPeriodicity_v1530;
   else
-    period1 = tdd_period_to_num[tdd_UL_DL_ConfigurationCommon->pattern1.dl_UL_TransmissionPeriodicity];
+    period1 = tdd_period_to_num[tdd_UL_DL_ConfigurationCommon->pattern1->dl_UL_TransmissionPeriodicity];
 			       
   if (tdd_UL_DL_ConfigurationCommon->pattern2) {
     if (tdd_UL_DL_ConfigurationCommon->pattern2->dl_UL_TransmissionPeriodicity_v1530)
@@ -3695,7 +3695,7 @@ bool is_nr_UL_slot(NR_TDD_UL_DL_ConfigCommon_t *tdd_UL_DL_ConfigurationCommon, s
   int slots1 = period1 * (1 << scs) / 1000;
   int slot_in_period = slot % slots;
   if (slot_in_period < slots1)
-    return slot_in_period >= tdd_UL_DL_ConfigurationCommon->pattern1.nrofDownlinkSlots;
+    return slot_in_period >= tdd_UL_DL_ConfigurationCommon->pattern1->nrofDownlinkSlots;
   else
     return slot_in_period >= slots1+tdd_UL_DL_ConfigurationCommon->pattern2->nrofDownlinkSlots;
 }
@@ -4146,8 +4146,8 @@ void get_type0_PDCCH_CSS_config_parameters(NR_Type0_PDCCH_CSS_config_t *type0_PD
   uint8_t ssb_slot = ssb_start_symbol/14;
 
   uint32_t is_condition_A = (ssb_subcarrier_offset == 0);   //  38.213 ch.13
-  uint32_t index_4msb = (mib->pdcch_ConfigSIB1.controlResourceSetZero);
-  uint32_t index_4lsb = (mib->pdcch_ConfigSIB1.searchSpaceZero);
+  uint32_t index_4msb = (mib->pdcch_ConfigSIB1->controlResourceSetZero);
+  uint32_t index_4lsb = (mib->pdcch_ConfigSIB1->searchSpaceZero);
 
   type0_PDCCH_CSS_config->num_rbs = -1;
   type0_PDCCH_CSS_config->num_symbols = -1;
